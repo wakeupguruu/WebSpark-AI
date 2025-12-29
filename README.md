@@ -18,11 +18,11 @@ Whether you are a developer looking to scaffold UI quickly or a non-coder wantin
 
 ## Key Features
 
--   ** Text-to-UI Generation**: Just describe it. "A modern landing page for a coffee shop with a dark theme." WebSpark-AI generates the React components and Tailwind CSS automatically.
--   ** Real-Time Preview**: Watch your code render instantly as the AI writes it. No more context switching.
--   ** Full-Stack Capabilities**: Generates both the frontend (React/Vite) and backend scaffolds (Node.js) needed to run your app.
--   ** Intelligent Context**: Powered by advanced LLMs to understand design patterns, responsiveness, and modern web standards.
--   ** Sandbox Environment**: Securely runs generated code in a browser-based environment.
+- Text-to-UI Generation**: Just describe it. "A modern landing page for a coffee shop with a dark theme." WebSpark-AI generates the React components and Tailwind CSS automatically.
+- Real-Time Preview**: Watch your code render instantly as the AI writes it. No more context switching.
+- Full-Stack Capabilities**: Generates both the frontend (React/Vite) and backend scaffolds (Node.js) needed to run your app.
+- Intelligent Context**: Powered by advanced LLMs to understand design patterns, responsiveness, and modern web standards.
+- Sandbox Environment**: Securely runs generated code in a browser-based environment.
 
 ## Tech Stack
 
