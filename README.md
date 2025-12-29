@@ -1,6 +1,5 @@
 # WebSpark-AI
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![AI Powered](https://img.shields.io/badge/AI-Powered-ff69b4)
@@ -97,7 +96,3 @@ Contributions are what make the open-source community such an amazing place to l
 
 **Guru Vyas (wakeupguruu)**
 -   GitHub: [@wakeupguruu](https://github.com/wakeupguruu)
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
