@@ -1,45 +1,97 @@
 import { useState } from 'react';
-import { FileViewer } from './components/FileViewer';
 import { Sidebar } from './components/Sidebar';
-import { Preview } from './components/Preview';
 import { ChatInterface } from './components/ChatInterface';
 import { Play, Menu } from 'lucide-react';
+import { LandingPage } from './components/LandingPage';
+import { Workspace } from './components/Workspace';
 
 // Mock files for demonstration
 const INITIAL_FILES = [
     {
         name: 'App.tsx',
         content: `import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import { Plus, Trash2, CheckCircle, Circle } from 'lucide-react';
+
+interface Todo {
+  id: number;
+  text: string;
+  completed: boolean;
+}
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [todos, setTodos] = useState<Todo[]>([
+    { id: 1, text: 'Review WebSpark AI design', completed: true },
+    { id: 2, text: 'Implement visual overhaul', completed: true },
+    { id: 3, text: 'Add AI Chat Interface', completed: false },
+  ]);
+  const [input, setInput] = useState('');
+
+  const addTodo = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    setTodos([...todos, { id: Date.now(), text: input, completed: false }]);
+    setInput('');
+  };
+
+  const toggleTodo = (id: number) => {
+    setTodos(todos.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+  };
+
+  const deleteTodo = (id: number) => {
+    setTodos(todos.filter(t => t.id !== id));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen bg-gray-950 text-gray-100 p-8 flex justify-center">
+      <div className="w-full max-w-md">
+        <h1 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+          Tasks
+        </h1>
+        
+        <form onSubmit={addTodo} className="mb-6 relative">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Add a new task..."
+            className="w-full bg-gray-900 border border-gray-800 rounded-xl py-3 px-4 pr-12 focus:outline-none focus:border-indigo-500 transition-colors"
+          />
+          <button 
+            type="submit"
+            className="absolute right-2 top-2 p-1 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-white transition-colors"
+          >
+            <Plus size={20} />
+          </button>
+        </form>
+
+        <div className="space-y-3">
+          {todos.map(todo => (
+            <div 
+              key={todo.id}
+              className="flex items-center gap-3 bg-gray-900/50 border border-gray-800 p-3 rounded-xl group hover:border-gray-700 transition-all"
+            >
+              <button 
+                onClick={() => toggleTodo(todo.id)}
+                className={\`flex-shrink-0 \${todo.completed ? 'text-emerald-500' : 'text-gray-600 hover:text-gray-400'}\`}
+              >
+                {todo.completed ? <CheckCircle size={22} /> : <Circle size={22} />}
+              </button>
+              
+              <span className={\`flex-1 \${todo.completed ? 'text-gray-500 line-through' : 'text-gray-200'}\`}>
+                {todo.text}
+              </span>
+              
+              <button 
+                onClick={() => deleteTodo(todo.id)}
+                className="text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   );
 }
 
@@ -64,54 +116,48 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  background-color: #030712; /* gray-950 */
+  color: white;
 }
 `
     },
     {
         name: 'package.json',
         content: `{
-  "name": "vite-react-typescript-starter",
+  "name": "react-todo-demo",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "lucide-react": "^0.344.0"
   }
 }`
     }
 ];
 
+// ... (keep Mock files) ...
+
 function App() {
+    const [files, setFiles] = useState(INITIAL_FILES);
     const [selectedFile, setSelectedFile] = useState(INITIAL_FILES[0]);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+    // Builder State
+    const [isBuilderActive, setIsBuilderActive] = useState(false);
+    const [initialPrompt, setInitialPrompt] = useState('');
+
+    const startBuild = (prompt: string, templateData?: { prompts: string[]; uiPrompts: string[] }) => {
+        setInitialPrompt(prompt);
+        setIsBuilderActive(true);
+        // templateData can be used in the future if needed for initial project setup
+    };
+
+    if (!isBuilderActive) {
+        return <LandingPage onStart={startBuild} />;
+    }
 
     return (
         <div className="h-screen w-screen bg-gray-950 text-white flex flex-col overflow-hidden">
@@ -138,47 +184,53 @@ function App() {
                 </div>
             </header>
 
-            {/* Main 3-Pane Layout */}
+            {/* Main Layout */}
             <div className="flex-1 flex overflow-hidden">
-                {/* 1. Left Sidebar: Chat & Files */}
+                {/* 1. Left Sidebar: Chat */}
                 <div className={`flex transition-all duration-300 ${isSidebarOpen ? 'w-80' : 'w-0'} bg-gray-950 border-r border-gray-800 overflow-hidden`}>
-                    {/* 
-                   Ideally, we would toggle between File Tree and Chat here, 
-                   or have them stacked. For now, let's keep Chat as the main focus 
-                   as requested ("Where I can write the prompt"), and maybe put the 
-                   Files in a collapsible section or just separate?
-                   
-                   Let's put Chat on top/main and Files in a hidden mode for now 
-                   to prioritize the request. Or better yet, a true 3-col layout 
-                   with Chat as the 1st col, Files as a drawer or part of 2nd col?
-                   
-                   Based on "similar to Bolt.new", the Chat is often a dedicated sidebar.
-                */}
-                    <ChatInterface />
+                    <ChatInterface
+                        files={files}
+                        setFiles={setFiles}
+                        initialPrompt={initialPrompt}
+                    />
                 </div>
 
-                {/* 2. Middle Pane: Editor + (Optional) File Explorer Sidebar */}
-                {/* We'll put the file explorer in a narrow strip or integrated here so it's not totally lost */}
+                {/* 2. Main Workspace (Tabs: Code | Preview) */}
                 <div className="flex-1 flex flex-col min-w-0 bg-gray-900 relative">
+                    {/* We can temporarily hide the Sidebar for this minimalist Plan->Builder view, or keep it depending on preference. 
+                         For now, let's keep it simple as requested: "editor and real terminal and preview".
+                         If we really want "code and preview at one place", the Workspace component handles that via tabs.
+                         The FileExplorer/Sidebar can be another tab or a collapsible panel. 
+                         Let's keep the legacy Sidebar for file navigation if needed, or hide it to maximize space. 
+                         Given "preview and code should be at one place only", I'll infer the layout is:
+                         [Chat] | [Workspace (Tabs: Code, Preview)]
+                     */}
                     <div className="flex flex-1 overflow-hidden">
-                        {/* File Tree (Narrow) */}
+                        {/* 
+                           Optional: Keep Sidebar? 
+                           The user said "sidebar where you can see editor and real terminal and preview". 
+                           Wait, user said "show them the builder page where you an see the editor and real terminal and preview".
+                           And "preview and code should be at one place only and you can switch between them".
+                           So Workspace handles the switch. 
+                           I will HIDE the old file sidebar for now to be cleaner, 
+                           OR keep it as a very narrow strip if file switching is needed.
+                           Let's keep it but make it collapsible/small.
+                        */}
                         <div className="w-56 border-r border-gray-800 hidden md:block">
                             <Sidebar
-                                files={INITIAL_FILES}
+                                files={files}
                                 onSelectFile={setSelectedFile}
                             />
                         </div>
 
-                        {/* Monaco Editor */}
-                        <div className="flex-1 flex flex-col min-w-0">
-                            <FileViewer file={selectedFile} />
+                        <div className="flex-1 min-w-0">
+                            <Workspace
+                                files={files}
+                                selectedFile={files.find(f => f.name === selectedFile.name) || files[0]}
+                                onSelectFile={setSelectedFile}
+                            />
                         </div>
                     </div>
-                </div>
-
-                {/* 3. Right Pane: Preview */}
-                <div className="w-[45%] min-w-[320px] bg-gray-950 border-l border-gray-800">
-                    <Preview />
                 </div>
             </div>
         </div>
