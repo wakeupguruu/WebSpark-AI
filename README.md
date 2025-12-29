@@ -23,6 +23,32 @@ Whether you are a developer looking to scaffold UI quickly or a non-coder wantin
 - Intelligent Context**: Powered by advanced LLMs to understand design patterns, responsiveness, and modern web standards.
 - Sandbox Environment**: Securely runs generated code in a browser-based environment.
 
+  ---
+
+## Architecture: How It Works
+
+WebSpark-AI differs from traditional AI code generators by running the development environment **entirely on the client-side**.
+
+Instead of sending your code to a remote cloud server to be executed (which is slow and costly), WebSpark-AI leverages **WebContainers** to emulate a Node.js operating system inside Chrome.
+
+### The Flow
+1.  **Prompt**: You send a request ("Make a to-do app").
+2.  **Generation**: The AI (via backend proxy) generates the file structure and code.
+3.  **Execution**: The **WebContainer** boots up a virtual file system and a Vite server directly in your browser.
+4.  **Preview**: The result renders instantly via an iframe, with 0ms latency for updates.
+
+```mermaid
+graph LR
+    A[User Prompt] --> B(AI Engine)
+    B --> C{WebContainer}
+    C -->|Writes Files| D[Virtual File System]
+    D -->|Runs| E[In-Browser Node.js]
+    E -->|Serves| F[Live Preview]
+```
+
+*This architecture ensures maximum privacy, speed, and the ability to work offline once dependencies are cached.*
+---
+
 ## Tech Stack
 
 **Frontend:**
