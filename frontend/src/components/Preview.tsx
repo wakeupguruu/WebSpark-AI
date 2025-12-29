@@ -1,4 +1,82 @@
 import { RefreshCw, Globe, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+
+// Todo App Logic for Preview (Simulated to match the code in Editor)
+// We are re-implementing the Todo logic here so it actually runs inside the 'iframe' (or div in this case for smoother interaction)
+// In a real WebContainer, this would run the actual code. Here we mock "Running".
+
+const PreviewContent = () => {
+    const [todos, setTodos] = useState([
+        { id: 1, text: 'Review WebSpark AI design', completed: true },
+        { id: 2, text: 'Implement visual overhaul', completed: true },
+        { id: 3, text: 'Add AI Chat Interface', completed: true },
+    ]);
+    const [input, setInput] = useState('');
+
+    const addTodo = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!input.trim()) return;
+        setTodos([...todos, { id: Date.now(), text: input, completed: false }]);
+        setInput('');
+    };
+
+    return (
+        <div className="w-full h-full bg-gray-950 font-sans text-gray-100 p-6 overflow-y-auto">
+            <div className="max-w-md mx-auto">
+                <h1 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                    Tasks
+                </h1>
+
+                <form onSubmit={addTodo} className="mb-6 relative">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Add a new task..."
+                        className="w-full bg-gray-900 border border-gray-800 rounded-xl py-3 px-4 pr-12 focus:outline-none focus:border-indigo-500 transition-colors placeholder-gray-600"
+                    />
+                    <button
+                        type="submit"
+                        className="absolute right-2 top-2 p-1 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-white transition-colors"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+                    </button>
+                </form>
+
+                <div className="space-y-3">
+                    {todos.map(todo => (
+                        <div
+                            key={todo.id}
+                            className="flex items-center gap-3 bg-gray-900/50 border border-gray-800 p-3 rounded-xl group hover:border-gray-700 transition-all"
+                        >
+                            <button
+                                onClick={() => setTodos(todos.map(t => t.id === todo.id ? { ...t, completed: !t.completed } : t))}
+                                className={`flex-shrink-0 ${todo.completed ? 'text-emerald-500' : 'text-gray-600 hover:text-gray-400'}`}
+                            >
+                                {todo.completed ?
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="m9 11 3 3L22 4" /></svg>
+                                    :
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /></svg>
+                                }
+                            </button>
+
+                            <span className={`flex-1 ${todo.completed ? 'text-gray-500 line-through' : 'text-gray-200'}`}>
+                                {todo.text}
+                            </span>
+
+                            <button
+                                onClick={() => setTodos(todos.filter(t => t.id !== todo.id))}
+                                className="text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            </div >
+        </div >
+    )
+}
 
 export function Preview() {
     return (
@@ -27,18 +105,9 @@ export function Preview() {
             </div>
 
             {/* Preview Content Area */}
-            <div className="flex-1 bg-white relative">
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400 bg-gray-50">
-                    <div className="text-center">
-                        <div className="w-16 h-16 border-4 border-gray-200 border-t-indigo-500 rounded-full animate-spin mx-auto mb-4"></div>
-                        <p className="text-sm text-gray-500 font-medium">Starting Dev Server...</p>
-                    </div>
-                </div>
-                <iframe
-                    className="w-full h-full border-none relative z-10"
-                    title="Preview"
-                    srcDoc="<!DOCTYPE html><html><body style='margin:0; font-family: sans-serif; padding: 20px; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f8fafc;'><h1 style='color: #0f172a;'>WebContainer Preview</h1></body></html>"
-                />
+            <div className="flex-1 bg-gray-950 relative overflow-hidden">
+                {/* We render the component directly instead of iframe for this demo to support interaction without complex message passing */}
+                <PreviewContent />
             </div>
 
             {/* Terminal Toggle (Mock) */}
